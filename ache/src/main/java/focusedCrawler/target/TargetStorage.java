@@ -259,7 +259,7 @@ public class TargetStorage  extends StorageDefault{
 			TargetRepository targetRepository; 
 			if (data_format.equals("CBOR")) {
             	targetRepository = new TargetCBORRepository(targetDirectory);
-			}
+            }
 			else {
 			//Default data format is file
             	targetRepository = new TargetFileRepository(targetDirectory);

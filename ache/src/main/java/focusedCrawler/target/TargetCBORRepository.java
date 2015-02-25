@@ -33,7 +33,7 @@ public class TargetCBORRepository implements TargetRepository {
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
   private Target myTarget;
-  private boolean writeWithCounter;
+  private boolean writeWithCounter=true;
   //} RAJAT
   
   public TargetCBORRepository(){
