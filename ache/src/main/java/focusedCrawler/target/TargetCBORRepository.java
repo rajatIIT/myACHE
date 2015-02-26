@@ -175,10 +175,10 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			
 	} else {
 					// RAJAT {
-					writeToLog("Multiple file mode selected");
+		
 					String currentFilePath;
 					// writing file for the first time
-			    	if(!currentFile.exists()){
+			    	if(currentFile.equals(null)){
 			    		writeToLog("First file does not exists");
 			    		
 			    		if(writeWithCounter)
