@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -34,17 +35,39 @@ public class TargetCBORRepository implements TargetRepository {
   private File currentFile;
   private Target myTarget;
   private boolean writeWithCounter=true;
+  private File logFile;
+  private PrintWriter logWriter;
   //} RAJAT
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
+	
+	//{RAJAT
+	try {
+		createLogFile();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	//}RAJAT
+	
 	}
   
   public TargetCBORRepository(String loc){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
+	  
+	//{RAJAT
+		try {
+			createLogFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//}RAJAT
+	  
   }
 
   /**
@@ -77,7 +100,7 @@ public class TargetCBORRepository implements TargetRepository {
     return contain;
   }
   
-
+//{RAJAT
   public String getLocation(){
 	  return location;
   }
@@ -89,6 +112,14 @@ public boolean getMultipleFlag() {
 public void setMultipleFlag(boolean multipleFlag) {
 	this.multipleFlag = multipleFlag;
 }
+
+
+private void createLogFile() throws IOException{
+	logFile = new File(location + File.separator + "rajatlog");
+	logFile.createNewFile();
+	logWriter= new PrintWriter(logFile);
+}
+//}RAJAT
 
 /**
  * Manages writing to CBOR files depending on storage scheme (Domain Name or counter based)
@@ -128,6 +159,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 					// writing file for the first time
 			    	if(currentFile.equals(null)){
 			    	String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    	logWriter.println("writing file with name" + currentFilePath);
 			    	currentFile = new File(currentFilePath);
 			    	currentFile.createNewFile();
 			    	}
