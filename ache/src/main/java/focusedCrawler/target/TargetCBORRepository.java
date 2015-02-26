@@ -176,9 +176,14 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 	} else {
 					// RAJAT {
 		
+		if (writeWithCounter)
+			currentFile = new File(location + File.separator + URLEncoder.encode(url) + "_" + counter);
+			else
+			currentFile = new File(location + File.separator + URLEncoder.encode(url));
+		
 					String currentFilePath;
 					// writing file for the first time
-			    	if(currentFile.equals(null)){
+			    	if(currentFile.exists()){
 			    		writeToLog("First file does not exists");
 			    		
 			    		if(writeWithCounter)
