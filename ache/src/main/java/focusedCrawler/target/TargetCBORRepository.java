@@ -36,7 +36,7 @@ public class TargetCBORRepository implements TargetRepository {
   private File currentFile;
   private Target myTarget;
   private boolean writeWithCounter=true;
-  private File logFile;
+  private String logLocation;
   private PrintWriter logWriter;
   //} RAJAT
   
@@ -118,7 +118,9 @@ public void setMultipleFlag(boolean multipleFlag) {
 
 
 private void createLogFile() throws IOException{
-	logFile = new File(location + File.separator + "rajatlog");
+	
+	logLocation = location + File.separator + "rajatlog";
+	File logFile = new File(location + File.separator + "rajatlog");
 	logFile.createNewFile();
 	
 }
@@ -126,10 +128,13 @@ private void createLogFile() throws IOException{
 
 private void writeToLog(String inputMessage){
 	try {
-		logWriter= new PrintWriter(logFile);
-		logWriter.println(inputMessage);
+		logWriter= new PrintWriter(new BufferedWriter(new FileWriter(logLocation, true)));
+		logWriter.append(inputMessage + "\n");
 		logWriter.close();
 	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
@@ -170,6 +175,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			
 	} else {
 					// RAJAT {
+					writeToLog("Multiple file mode selected");
 					String currentFilePath;
 					// writing file for the first time
 			    	if(!currentFile.exists()){
