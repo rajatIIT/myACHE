@@ -173,7 +173,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 					String currentFilePath;
 					// writing file for the first time
 			    	if(!currentFile.exists()){
-			    	
+			    		writeToLog("First file does not exists");
 			    		
 			    		if(writeWithCounter)
 			    		currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
@@ -185,6 +185,8 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    	writeToLog("Creating New File");
 			    	currentFile = new File(currentFilePath);
 			    	currentFile.createNewFile();
+			    	} else {
+			    		writeToLog("First file exists");
 			    	}
 				
 			    	// check if we have written pages more than file size
