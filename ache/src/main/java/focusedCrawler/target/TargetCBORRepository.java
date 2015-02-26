@@ -42,6 +42,7 @@ public class TargetCBORRepository implements TargetRepository {
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
+	multiplePagesBlockSize = 500;
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	
 	//{RAJAT
@@ -60,7 +61,7 @@ public class TargetCBORRepository implements TargetRepository {
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
-	  
+	  multiplePagesBlockSize = 500;  
 	//{RAJAT
 		try {
 			createLogFile();
