@@ -31,13 +31,12 @@ public class TargetCBORRepository implements TargetRepository {
   private TargetModel targetModel;
 
   //RAJAT {
-  public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
+  public boolean multipleFlag;				// true : we want to write multiple pages info in one file
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
+  private String currentFileLocation;
   private Target myTarget;
   private boolean writeWithCounter=true;
-  private String logLocation;
-  private PrintWriter logWriter;
   //} RAJAT
   
   public TargetCBORRepository(){
@@ -45,15 +44,14 @@ public class TargetCBORRepository implements TargetRepository {
 	multiplePagesBlockSize = 500;
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	
-	//{RAJAT
-	try {
-		createLogFile();
-		writeToLog("Creating log file");
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	if (multipleFlag){
+		// initialize the first file
+		if (writeWithCounter)
+			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor");
+			else
+			currentFileLocation = location + File.separator + 0 + ".cbor";
+		(new File(currentFileLocation)).createNewFile();
 	}
-	//}RAJAT
 	
 	}
   
@@ -61,21 +59,21 @@ public class TargetCBORRepository implements TargetRepository {
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
-	  multiplePagesBlockSize = 500;  
-	//{RAJAT
-		try {
-			createLogFile();
-			writeToLog("Creating log file");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//}RAJAT
+	  multiplePagesBlockSize = 500; 
+	  if (multipleFlag) {
+		  // initialize the first file
+		  
+	  }
 	  
   }
 
   /**
    * The method inserts a page with its respective crawl number.
+   * 
+   * On insert, the system should have already decided the file where to insert the CBOR Data for that page.
+   * 
+   * could be achieved by using a simple String parameter and update it whenever required.
+   * 
    */
   public boolean insert(Target target, int counter) {
 	writeWithCounter=true;
@@ -117,32 +115,6 @@ public void setMultipleFlag(boolean multipleFlag) {
 	this.multipleFlag = multipleFlag;
 }
 
-
-private void createLogFile() throws IOException{
-	
-	logLocation = location + File.separator + "rajatlog";
-	File logFile = new File(location + File.separator + "rajatlog");
-	logFile.createNewFile();
-	
-}
-
-
-private void writeToLog(String inputMessage){
-	try {
-		logWriter= new PrintWriter(new BufferedWriter(new FileWriter(logLocation, true)));
-		logWriter.append(inputMessage + "\n");
-		logWriter.close();
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-}
-//}RAJAT
-
 /**
  * Manages writing to CBOR files depending on storage scheme (Domain Name or counter based)
  * 
@@ -173,51 +145,52 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
 		else
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url));
+		
+		mapper.writeValue(currentFile, this.targetModel);
 			
 	} else {
 					// RAJAT {
 		
-		if (writeWithCounter)
-			currentFile = new File(location + File.separator + URLEncoder.encode(url) + "_" + counter);
-			else
-			currentFile = new File(location + File.separator + URLEncoder.encode(url));
-		
-					String currentFilePath;
-					// writing file for the first time
-			    	if(currentFile.exists()){
-			    		writeToLog("First file does not exists");
-			    		
-			    		if(writeWithCounter)
-			    		currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
-			    		else
-			    		currentFilePath = location + File.separator + "-" +  this.targetModel.timestamp + ".cbor";
-			    		
-			    	writeToLog("writing file with name" + currentFilePath);
-			    	
-			    	writeToLog("Creating New File");
-			    	currentFile = new File(currentFilePath);
-			    	currentFile.createNewFile();
-			    	} else {
-			    		writeToLog("First file exists");
-			    	}
+//		if (writeWithCounter)
+//			currentFile = new File(location + File.separator + URLEncoder.encode(url) + "_" + counter);
+//			else
+//			currentFile = new File(location + File.separator + URLEncoder.encode(url));
+//		
+//					String currentFilePath;
+//					// writing file for the first time
+//			    	if(currentFile.exists()){
+//			    		if(writeWithCounter)
+//			    		currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+//			    		else
+//			    		currentFilePath = location + File.separator + "-" +  this.targetModel.timestamp + ".cbor";
+//			    		
+//			    	currentFile = new File(currentFilePath);
+//			    	currentFile.createNewFile();
+//			    	} else {
+//			    	}
 				
 			    	// check if we have written pages more than file size
-			    	if(counter%multiplePagesBlockSize==0){
+		
+					if(counter%multiplePagesBlockSize==0){
 			    		
 			    		if(writeWithCounter)
-			    			currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    			currentFileLocation = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
 			    		else
-			    			currentFilePath = location + File.separator + this.targetModel.timestamp + ".cbor";
+			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
-					currentFile = new File(currentFilePath);
-					currentFile.createNewFile();
-					writeToLog("writing file with name" + currentFilePath);
+					new File(currentFileLocation).createNewFile();
+					
 			    	}
 					
+					/// manage writing using FileOutputStream
+					
+					// just open the file with currentfileLocation and write the respective data into that file
+					
 			    	// } RAJAT
-			    	
+					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
+			    //	mapper.writeValue(currentFile, this.targetModel);
 	}
-	mapper.writeValue(currentFile, this.targetModel);
+	
 }
   
 }
