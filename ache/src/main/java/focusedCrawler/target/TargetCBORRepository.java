@@ -170,10 +170,16 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			
 	} else {
 					// RAJAT {
-					if(writeWithCounter){
+					String currentFilePath;
 					// writing file for the first time
 			    	if(!currentFile.exists()){
-			    	String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    	
+			    		
+			    		if(writeWithCounter)
+			    		currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    		else
+			    		currentFilePath = location + File.separator + "-" +  this.targetModel.timestamp + ".cbor";
+			    		
 			    	writeToLog("writing file with name" + currentFilePath);
 			    	
 			    	writeToLog("Creating New File");
@@ -184,12 +190,16 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    	// check if we have written pages more than file size
 			    	if(counter%multiplePagesBlockSize==0){
 			    		
-					String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    		if(writeWithCounter)
+			    			currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+			    		else
+			    			currentFilePath = location + File.separator + this.targetModel.timestamp + ".cbor";
+			    		
 					currentFile = new File(currentFilePath);
 					currentFile.createNewFile();
 					writeToLog("writing file with name" + currentFilePath);
 			    	}
-					}
+					
 			    	// } RAJAT
 			    	
 	}
