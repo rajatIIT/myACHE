@@ -31,7 +31,7 @@ public class TargetCBORRepository implements TargetRepository {
   private TargetModel targetModel;
 
   //RAJAT {
-  public boolean multipleFlag;				// true : we want to write multiple pages info in one file
+  public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
   private Target myTarget;
