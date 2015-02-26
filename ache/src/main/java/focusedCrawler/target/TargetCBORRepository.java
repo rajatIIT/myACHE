@@ -30,7 +30,7 @@ public class TargetCBORRepository implements TargetRepository {
   private TargetModel targetModel;
 
   //RAJAT {
-  public boolean multipleFlag;				// true : we want to write multiple pages info in one file
+  public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
   private Target myTarget;
@@ -147,6 +147,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
             dir.mkdir();
         }
 		logWriter.println("writing file with name" + dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
+		logWriter.close();
 		if (writeWithCounter)
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
 		else
@@ -160,6 +161,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    	if(currentFile.equals(null)){
 			    	String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
 			    	logWriter.println("writing file with name" + currentFilePath);
+			    	logWriter.close();
 			    	currentFile = new File(currentFilePath);
 			    	currentFile.createNewFile();
 			    	}
