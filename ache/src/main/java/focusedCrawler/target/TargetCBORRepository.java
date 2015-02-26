@@ -47,6 +47,7 @@ public class TargetCBORRepository implements TargetRepository {
 	//{RAJAT
 	try {
 		createLogFile();
+		writeToLog("Creating log file");
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -63,6 +64,7 @@ public class TargetCBORRepository implements TargetRepository {
 	//{RAJAT
 		try {
 			createLogFile();
+			writeToLog("Creating log file");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,24 +169,25 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url));
 			
 	} else {
-		
 					// RAJAT {
-		writeToLog("inside my  code !");
 					if(writeWithCounter){
 					// writing file for the first time
-			    	if(currentFile.equals(null)){
+			    	if(!currentFile.exists()){
 			    	String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
 			    	writeToLog("writing file with name" + currentFilePath);
 			    	
+			    	writeToLog("Creating New File");
 			    	currentFile = new File(currentFilePath);
 			    	currentFile.createNewFile();
 			    	}
 				
 			    	// check if we have written pages more than file size
 			    	if(counter%multiplePagesBlockSize==0){
+			    		
 					String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
 					currentFile = new File(currentFilePath);
 					currentFile.createNewFile();
+					writeToLog("writing file with name" + currentFilePath);
 			    	}
 					}
 			    	// } RAJAT
