@@ -146,7 +146,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 		if(!dir.exists()){
             dir.mkdir();
         }
-		
+		logWriter.println("writing file with name" + dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
 		if (writeWithCounter)
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
 		else
