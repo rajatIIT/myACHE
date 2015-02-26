@@ -5,6 +5,7 @@ import focusedCrawler.util.Target;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -30,7 +31,7 @@ public class TargetCBORRepository implements TargetRepository {
   private TargetModel targetModel;
 
   //RAJAT {
-  public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
+  public boolean multipleFlag;				// true : we want to write multiple pages info in one file
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
   private Target myTarget;
@@ -117,7 +118,20 @@ public void setMultipleFlag(boolean multipleFlag) {
 private void createLogFile() throws IOException{
 	logFile = new File(location + File.separator + "rajatlog");
 	logFile.createNewFile();
-	logWriter= new PrintWriter(logFile);
+	
+}
+
+
+private void writeToLog(String inputMessage){
+	try {
+		logWriter= new PrintWriter(logFile);
+		logWriter.println(inputMessage);
+		logWriter.close();
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
 }
 //}RAJAT
 
@@ -146,8 +160,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 		if(!dir.exists()){
             dir.mkdir();
         }
-		logWriter.println("writing file with name" + dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
-		logWriter.close();
+		
 		if (writeWithCounter)
 		currentFile = new File(dir.toString() + File.separator + URLEncoder.encode(url) + "_" + counter);
 		else
@@ -156,12 +169,13 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 	} else {
 		
 					// RAJAT {
+		writeToLog("inside my  code !");
 					if(writeWithCounter){
 					// writing file for the first time
 			    	if(currentFile.equals(null)){
 			    	String currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
-			    	logWriter.println("writing file with name" + currentFilePath);
-			    	logWriter.close();
+			    	writeToLog("writing file with name" + currentFilePath);
+			    	
 			    	currentFile = new File(currentFilePath);
 			    	currentFile.createNewFile();
 			    	}
