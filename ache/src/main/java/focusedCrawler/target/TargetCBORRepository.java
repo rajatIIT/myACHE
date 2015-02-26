@@ -47,10 +47,15 @@ public class TargetCBORRepository implements TargetRepository {
 	if (multipleFlag){
 		// initialize the first file
 		if (writeWithCounter)
-			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor");
+			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
 			else
 			currentFileLocation = location + File.separator + 0 + ".cbor";
-		(new File(currentFileLocation)).createNewFile();
+		try {
+			(new File(currentFileLocation)).createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	}
