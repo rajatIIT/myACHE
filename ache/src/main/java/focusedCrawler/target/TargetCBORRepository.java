@@ -31,35 +31,31 @@ public class TargetCBORRepository implements TargetRepository {
   private TargetModel targetModel;
 
   //RAJAT {
-  public boolean multipleFlag;				// true : we want to write multiple pages info in one file
+  public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
   private int multiplePagesBlockSize;		// to be retrieved from config file
   private File currentFile;
   private String currentFileLocation;
   private Target myTarget;
   private boolean writeWithCounter=true;
-  private boolean firstFile=false;
-  private static final Logger log = Logger.getLogger( TargetCBORRepository.class.getName());
   //} RAJAT
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	multiplePagesBlockSize = 500;
-	
-	
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	
 	if (multipleFlag){
 		// initialize the first file
-//		if (writeWithCounter)
-//			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
-//			else
-//			currentFileLocation = location + File.separator + 0 + ".cbor";
-//		try {
-//			(new File(currentFileLocation)).createNewFile();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		if (writeWithCounter)
+			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
+			else
+			currentFileLocation = location + File.separator + 0 + ".cbor";
+		try {
+			(new File(currentFileLocation)).createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	}
@@ -68,32 +64,23 @@ public class TargetCBORRepository implements TargetRepository {
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
-	  multiplePagesBlockSize = 500;
-//	  if (multipleFlag) {
-//		  // initialize the first file
-//		  if (writeWithCounter)
-//				currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
-//				else
-//				currentFileLocation = location + File.separator + 0 + ".cbor";
-//			try {
-//				(new File(currentFileLocation)).createNewFile();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		  
-//	  }
+	  multiplePagesBlockSize = 500; 
+	  if (multipleFlag) {
+		  // initialize the first file
+		  
+	  }
 	  
   }
 
   /**
    * The method inserts a page with its respective crawl number.
    * 
+   * On insert, the system should have already decided the file where to insert the CBOR Data for that page.
+   * 
+   * could be achieved by using a simple String parameter and update it whenever required.
    * 
    */
   public boolean insert(Target target, int counter) {
-	  log.info("calling insert");
-	  log.severe("severe : calling insert");
 	writeWithCounter=true;
 	boolean contain = false;
 	try {
@@ -108,7 +95,6 @@ public class TargetCBORRepository implements TargetRepository {
   
 
   public boolean insert(Target target) {
-	  log.info("calling insert");
 	writeWithCounter=false;
     boolean contain = false;
     try {
@@ -169,10 +155,28 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			
 	} else {
 					// RAJAT {
-					log.info("input flag is set.");
-					if(counter%multiplePagesBlockSize==0 || !firstFile){
-						if (!firstFile)
-							log.info("No files exist! Creating first file.");
+		
+//		if (writeWithCounter)
+//			currentFile = new File(location + File.separator + URLEncoder.encode(url) + "_" + counter);
+//			else
+//			currentFile = new File(location + File.separator + URLEncoder.encode(url));
+//		
+//					String currentFilePath;
+//					// writing file for the first time
+//			    	if(currentFile.exists()){
+//			    		if(writeWithCounter)
+//			    		currentFilePath = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
+//			    		else
+//			    		currentFilePath = location + File.separator + "-" +  this.targetModel.timestamp + ".cbor";
+//			    		
+//			    	currentFile = new File(currentFilePath);
+//			    	currentFile.createNewFile();
+//			    	} else {
+//			    	}
+				
+			    	// check if we have written pages more than file size
+		
+					if(counter%multiplePagesBlockSize==0){
 			    		
 			    		if(writeWithCounter)
 			    			currentFileLocation = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
@@ -180,12 +184,16 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
 					new File(currentFileLocation).createNewFile();
-					log.info("Created a new file with name " + counter + "-" +  this.targetModel.timestamp + ".cbor");
-					firstFile=true;
 					
 			    	}
-					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
+					
+					/// manage writing using FileOutputStream
+					
+					// just open the file with currentfileLocation and write the respective data into that file
+					
 			    	// } RAJAT
+					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
+			    //	mapper.writeValue(currentFile, this.targetModel);
 	}
 	
 }
