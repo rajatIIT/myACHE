@@ -38,7 +38,7 @@ public class TargetCBORRepository implements TargetRepository {
   private Target myTarget;
   private boolean writeWithCounter=true;
   private boolean firstFile=false;
-  private static final Logger log = Logger.getLogger( TargetCBORRepository.class.getName() );
+  private static final Logger log = Logger.getLogger( TargetCBORRepository.class.getName());
   //} RAJAT
   
   public TargetCBORRepository(){
@@ -92,6 +92,8 @@ public class TargetCBORRepository implements TargetRepository {
    * 
    */
   public boolean insert(Target target, int counter) {
+	  log.info("calling insert");
+	  log.severe("severe : calling insert");
 	writeWithCounter=true;
 	boolean contain = false;
 	try {
@@ -106,6 +108,7 @@ public class TargetCBORRepository implements TargetRepository {
   
 
   public boolean insert(Target target) {
+	  log.info("calling insert");
 	writeWithCounter=false;
     boolean contain = false;
     try {
