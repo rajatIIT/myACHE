@@ -37,29 +37,29 @@ public class TargetCBORRepository implements TargetRepository {
   private String currentFileLocation;
   private Target myTarget;
   private boolean writeWithCounter=true;
+  private boolean firstFile=false;
   private static final Logger log = Logger.getLogger( TargetCBORRepository.class.getName() );
   //} RAJAT
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	multiplePagesBlockSize = 500;
-	log.info("info messgae");
-	log.severe("Sever message");
+	
 	
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	
 	if (multipleFlag){
 		// initialize the first file
-		if (writeWithCounter)
-			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
-			else
-			currentFileLocation = location + File.separator + 0 + ".cbor";
-		try {
-			(new File(currentFileLocation)).createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		if (writeWithCounter)
+//			currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
+//			else
+//			currentFileLocation = location + File.separator + 0 + ".cbor";
+//		try {
+//			(new File(currentFileLocation)).createNewFile();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	}
@@ -69,12 +69,20 @@ public class TargetCBORRepository implements TargetRepository {
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	  multiplePagesBlockSize = 500;
-	  log.info("info messgae");
-		log.severe("Sever message");
-	  if (multipleFlag) {
-		  // initialize the first file
-		  
-	  }
+//	  if (multipleFlag) {
+//		  // initialize the first file
+//		  if (writeWithCounter)
+//				currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
+//				else
+//				currentFileLocation = location + File.separator + 0 + ".cbor";
+//			try {
+//				(new File(currentFileLocation)).createNewFile();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		  
+//	  }
 	  
   }
 
@@ -158,7 +166,10 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			
 	} else {
 					// RAJAT {
-					if(counter%multiplePagesBlockSize==0){
+					log.info("input flag is set.");
+					if(counter%multiplePagesBlockSize==0 || !firstFile){
+						if (!firstFile)
+							log.info("No files exist! Creating first file.");
 			    		
 			    		if(writeWithCounter)
 			    			currentFileLocation = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
@@ -166,6 +177,8 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
 					new File(currentFileLocation).createNewFile();
+					log.info("Created a new file with name " + counter + "-" +  this.targetModel.timestamp + ".cbor");
+					firstFile=true;
 					
 			    	}
 					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
