@@ -46,7 +46,7 @@ public class TargetCBORRepository implements TargetRepository {
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
-	LOGGER.info("rajat: initialize repository");
+	
 	myCounter=0;
 	
 	if (multipleFlag){
@@ -69,7 +69,7 @@ public class TargetCBORRepository implements TargetRepository {
   public TargetCBORRepository(String loc){
 	  
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
-	LOGGER.info("rajat: initialize repository");
+	
 	myCounter=0;
 	
 	  this.location = loc;
@@ -198,7 +198,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 //			    	}
 				
 			    	// check if we have written pages more than file size
-		LOGGER.info("rajat: counter val is " + counter);
+		
 					if( counter % multiplePagesBlockSize ==0){
 						
 			    		
@@ -208,7 +208,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
 					new File(currentFileLocation).createNewFile();
-					LOGGER.info("rajat: we completed one file ! Creating new file by name " + currentFileLocation);
+		
 					
 			    	}
 					
@@ -218,7 +218,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 					
 			    	// } RAJAT
 					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
-					LOGGER.info("rajat: Writing another page to file: " + currentFileLocation);
+		
 			    //	mapper.writeValue(currentFile, this.targetModel);
 	}
 	
