@@ -118,7 +118,7 @@ public class TargetCBORRepository implements TargetRepository {
 
   public boolean insert(Target target) {
 	  myCounter++;
-	writeWithCounter=false;
+	writeWithCounter=true;
     boolean contain = false;
     try {
     	myTarget=target;
@@ -198,7 +198,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 //			    	}
 				
 			    	// check if we have written pages more than file size
-		
+		LOGGER.info("rajat: counter val is " + counter);
 					if(counter%multiplePagesBlockSize==0){
 						
 			    		
@@ -208,7 +208,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
 					new File(currentFileLocation).createNewFile();
-					LOGGER.info("we completed one file ! Creating new file by name " + currentFileLocation);
+					LOGGER.info("rajat: we completed one file ! Creating new file by name " + currentFileLocation);
 					
 			    	}
 					
@@ -218,7 +218,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 					
 			    	// } RAJAT
 					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
-					LOGGER.info("Writing another page to file: " + currentFileLocation);
+					LOGGER.info("rajat: Writing another page to file: " + currentFileLocation);
 			    //	mapper.writeValue(currentFile, this.targetModel);
 	}
 	
