@@ -37,12 +37,14 @@ public class TargetCBORRepository implements TargetRepository {
   private String currentFileLocation;
   private Target myTarget;
   private boolean writeWithCounter=true;
+  private final static Logger LOGGER = Logger.getLogger(TargetCBORRepository.class.getName());
   //} RAJAT
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	multiplePagesBlockSize = 500;
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
+	LOGGER.info("rajat: initialize repository");
 	
 	if (multipleFlag){
 		// initialize the first file
@@ -61,7 +63,10 @@ public class TargetCBORRepository implements TargetRepository {
 	}
   
   public TargetCBORRepository(String loc){
+	  
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
+	LOGGER.info("rajat: initialize repository");
+	
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	  multiplePagesBlockSize = 500; 
