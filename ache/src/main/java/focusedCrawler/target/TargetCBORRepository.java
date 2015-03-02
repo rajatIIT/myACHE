@@ -21,6 +21,7 @@ import weka.core.logging.Logger.Level;
 
 import com.fasterxml.jackson.dataformat.cbor.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.org.apache.xalan.internal.xsltc.dom.CurrentNodeListFilter;
 /*
 *
 */
@@ -54,6 +55,7 @@ public class TargetCBORRepository implements TargetRepository {
 			currentFileLocation = location + File.separator + 0 + ".cbor";
 		try {
 			(new File(currentFileLocation)).createNewFile();
+			LOGGER.info("rajat: creating new file by name " + currentFileLocation);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,7 +73,18 @@ public class TargetCBORRepository implements TargetRepository {
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	  multiplePagesBlockSize = 500; 
 	  if (multipleFlag) {
-		  // initialize the first file
+
+			// initialize the first file
+			if (writeWithCounter)
+				currentFileLocation = location + File.separator + 0 + "_" + 0 + ".cbor";
+				else
+				currentFileLocation = location + File.separator + 0 + ".cbor";
+			try {
+				(new File(currentFileLocation)).createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		  
 	  }
 	  
@@ -182,6 +195,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    	// check if we have written pages more than file size
 		
 					if(counter%multiplePagesBlockSize==0){
+						
 			    		
 			    		if(writeWithCounter)
 			    			currentFileLocation = location + File.separator + counter + "-" +  this.targetModel.timestamp + ".cbor";
@@ -189,6 +203,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 			    			currentFileLocation = location + File.separator + this.targetModel.timestamp + ".cbor";
 			    		
 					new File(currentFileLocation).createNewFile();
+					LOGGER.info("we completed one file ! Creating new file by name " + currentFileLocation);
 					
 			    	}
 					
@@ -198,6 +213,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 					
 			    	// } RAJAT
 					mapper.writeValue(new FileOutputStream(currentFileLocation, true),this.targetModel);
+					LOGGER.info("Writing another page to file: " + currentFileLocation);
 			    //	mapper.writeValue(currentFile, this.targetModel);
 	}
 	
