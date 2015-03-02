@@ -33,7 +33,7 @@ public class TargetCBORRepository implements TargetRepository {
 
   //RAJAT {
   public boolean multipleFlag=true;				// true : we want to write multiple pages info in one file
-  private int multiplePagesBlockSize;		// to be retrieved from config file
+  private int multiplePagesBlockSize=5;		// to be retrieved from config file
   private File currentFile;
   private String currentFileLocation;
   private Target myTarget;
@@ -44,7 +44,7 @@ public class TargetCBORRepository implements TargetRepository {
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
-	multiplePagesBlockSize = 5;
+	
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	LOGGER.info("rajat: initialize repository");
 	myCounter=0;
@@ -74,7 +74,7 @@ public class TargetCBORRepository implements TargetRepository {
 	
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
-	  multiplePagesBlockSize = 500; 
+	   
 	  if (multipleFlag) {
 
 			// initialize the first file
@@ -199,7 +199,7 @@ private void manageFileWriting(boolean inputFlag, int counter) throws IOExceptio
 				
 			    	// check if we have written pages more than file size
 		LOGGER.info("rajat: counter val is " + counter);
-					if(counter%multiplePagesBlockSize==0){
+					if( counter % multiplePagesBlockSize ==0){
 						
 			    		
 			    		if(writeWithCounter)
