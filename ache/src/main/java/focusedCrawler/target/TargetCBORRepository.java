@@ -39,6 +39,7 @@ public class TargetCBORRepository implements TargetRepository {
   private Target myTarget;
   private boolean writeWithCounter=true;
   private final static Logger LOGGER = Logger.getLogger(TargetCBORRepository.class.getName());
+  int myCounter;
   //} RAJAT
   
   public TargetCBORRepository(){
@@ -46,6 +47,7 @@ public class TargetCBORRepository implements TargetRepository {
 	multiplePagesBlockSize = 500;
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	LOGGER.info("rajat: initialize repository");
+	myCounter=0;
 	
 	if (multipleFlag){
 		// initialize the first file
@@ -68,6 +70,7 @@ public class TargetCBORRepository implements TargetRepository {
 	  
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
 	LOGGER.info("rajat: initialize repository");
+	myCounter=0;
 	
 	  this.location = loc;
 	  //RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
@@ -99,11 +102,12 @@ public class TargetCBORRepository implements TargetRepository {
    * 
    */
   public boolean insert(Target target, int counter) {
+	  myCounter++;
 	writeWithCounter=true;
 	boolean contain = false;
 	try {
     	myTarget=target;
-   		manageFileWriting(multipleFlag,counter);
+   		manageFileWriting(multipleFlag,myCounter);
     }
     catch (IOException ex) {
       ex.printStackTrace();
@@ -113,11 +117,12 @@ public class TargetCBORRepository implements TargetRepository {
   
 
   public boolean insert(Target target) {
+	  myCounter++;
 	writeWithCounter=false;
     boolean contain = false;
     try {
     	myTarget=target;
-   		manageFileWriting(multipleFlag,0);
+   		manageFileWriting(multipleFlag,myCounter);
     }
     catch (IOException ex) {
       ex.printStackTrace();
