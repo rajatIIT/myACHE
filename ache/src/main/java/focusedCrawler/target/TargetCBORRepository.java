@@ -44,7 +44,7 @@ public class TargetCBORRepository implements TargetRepository {
   
   public TargetCBORRepository(){
 	targetModel = new TargetModel("Kien Pham", "kien.pham@nyu.edu");//This contact information should be read from config file
-	multiplePagesBlockSize = 500;
+	multiplePagesBlockSize = 5;
 	// RAJAT: multiplePagesBlockSize RETRIEVAL FROM CONFIG FILE
 	LOGGER.info("rajat: initialize repository");
 	myCounter=0;
